@@ -1,62 +1,98 @@
 import React, {useState} from 'react'
+import {ethers} from 'ethers'
+import SimpleStorage_abi from './contracts/SimpleStorage_abi.json'
 
-function Landing() {
+const SimpleStorage = () => {
 
-    const [errorMEssage, setErrorMessage] = useState(null);
-    const [defaultAccount, setDefaultAccount] = useState(null);
-    const [connButtonText, setConnButtonText] = useState('Connect Wallet');
+	// deploy simple storage contract and paste deployed contract address here. This value is local ganache chain
+	let contractAddress = '0x7bfc913ca13b1564C25008C0a51c2eDd1798c4bD';
 
-    const [currentContractVal, setCurrentContractVal] = useState(null);
+	const [errorMessage, setErrorMessage] = useState(null);
+	const [defaultAccount, setDefaultAccount] = useState(null);
+	const [connButtonText, setConnButtonText] = useState('Connect Wallet');
 
-    const [provider, setProvider] = useState(null);
-    const [signer, setSigner] = useState(null);
-    const [contract, setContract] = useState(null);
+	const [currentContractVal, setCurrentContractVal] = useState(null);
 
-    const connectWalletHandler = () => {
-        // Miramos si tenemos Metamask instalado. 
-        // En caso de que no esté instalado, mostramos un mensaje de error. 
-        if (window.ethereum) {
-            // Devuelve las accounts de Metamask y pide acceso a ellas
-            window.ethereum.request({method: 'eth_requestAccounts'}).then(
-                result => {
-                    accountChangeHandler(result[0]);
-                    setConnButtonText('Wallet Connected!')
-                }
-            )
-        } else {
-            setErrorMessage('Need to install Metamask!')
-        }
-    }
+	const [provider, setProvider] = useState(null);
+	const [signer, setSigner] = useState(null);
+	const [contract, setContract] = useState(null);
 
-    const accountChangeHandler = (newAccount) => {
-        setDefaultAccount(newAccount)
-        updateEthers()
-    }
+	const connectWalletHandler = () => {
+		if (window.ethereum && window.ethereum.isMetaMask) {
 
-    const updateEthers = () => {
-        let tempProvider = new updateEthers.providers.Web3Provider (window.ethereum);
-        setProvider(tempProvider);
+			window.ethereum.request({ method: 'eth_requestAccounts'})
+			.then(result => {
+				accountChangedHandler(result[0]);
+				setConnButtonText('Wallet Connected');
+			})
+			.catch(error => {
+				setErrorMessage(error.message);
+			
+			});
 
-        let tempSigner = tempProvider.getSigner();
-        setSigner(tempSigner);
+		} else {
+			console.log('Need to install MetaMask');
+			setErrorMessage('Please install MetaMask browser extension to interact');
+		}
+	}
 
-        let tempContract = new updateEthers.Contract(contractAddress, Contract_abi, tempSigner);
-        setConnButtonText(tempContract)
-    }
+	// update account, will cause component re-render
+	const accountChangedHandler = (newAccount) => {
+		setDefaultAccount(newAccount);
+		updateEthers();
+	}
 
-    return(
-        <div className='App'>
-            <h1>
-                Interacción con smart contract
-            </h1>
-            <button onClick={connectWalletHandler}>
-                {connButtonText}
-            </button>
-            <h4>Address: {defaultAccount}</h4>
+	const chainChangedHandler = () => {
+		// reload the page to avoid any errors with chain change mid use of application
+		window.location.reload();
+	}
 
-            {errorMEssage}
-        </div>
-    );
-};
 
-export default Landing;
+	// listen for account changes
+	window.ethereum.on('accountsChanged', accountChangedHandler);
+
+	window.ethereum.on('chainChanged', chainChangedHandler);
+
+	const updateEthers = () => {
+		let tempProvider = new ethers.providers.Web3Provider(window.ethereum);
+		setProvider(tempProvider);
+
+		let tempSigner = tempProvider.getSigner();
+		setSigner(tempSigner);
+
+		let tempContract = new ethers.Contract(contractAddress, SimpleStorage_abi, tempSigner);
+		setContract(tempContract);	
+	}
+
+	const setHandler = (event) => {
+		event.preventDefault();
+		console.log('sending ' + event.target.setText.value + ' to the contract');
+		contract.set(event.target.setText.value);
+	}
+
+	const getCurrentVal = async () => {
+		let val = await contract.get();
+		setCurrentContractVal(val);
+	}
+	
+	return (
+		<div>
+		<h4> {"Get/Set Contract interaction"} </h4>
+			<button onClick={connectWalletHandler}>{connButtonText}</button>
+			<div>
+				<h3>Address: {defaultAccount}</h3>
+			</div>
+			<form onSubmit={setHandler}>
+				<input id="setText" type="text"/>
+				<button type={"submit"}> Update Contract </button>
+			</form>
+			<div>
+			<button onClick={getCurrentVal} style={{marginTop: '5em'}}> Get Current Contract Value </button>
+			</div>
+			{currentContractVal}
+			{errorMessage}
+		</div>
+	);
+}
+
+export default SimpleStorage;
