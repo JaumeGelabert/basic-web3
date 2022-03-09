@@ -8,6 +8,7 @@ const SimpleStorage = () => {
 	// deploy simple storage contract and paste deployed contract address here.
 	let contractAddress = '0xAA4c8A5512c152ba5835d7f15eDD8cfE242c9068';
 
+	// Mediante estos UseState podemos modificar el contenido de algunos elementos
 	const [errorMessage, setErrorMessage] = useState(null);
 	const [defaultAccount, setDefaultAccount] = useState(null);
 	const [connButtonText, setConnButtonText] = useState('Connect Wallet');
@@ -19,11 +20,15 @@ const SimpleStorage = () => {
 	const [contract, setContract] = useState(null);
 
 	const connectWalletHandler = () => {
+		// Si se detecta que existe la extensión de Metamask en el navegador...
 		if (window.ethereum && window.ethereum.isMetaMask) {
 
+			// Accedemos a listado de cuentas conectadas
 			window.ethereum.request({ method: 'eth_requestAccounts'})
 			.then(result => {
+				// y elegimos la de índice 0
 				accountChangedHandler(result[0]);
+				// Cambiamos el UseState del boton para que muestre 'Wallet Connected'
 				setConnButtonText('Wallet Connected');
 			})
 			.catch(error => {
@@ -31,6 +36,7 @@ const SimpleStorage = () => {
 			
 			});
 
+		// Si no hay Metamask instalado, mostramos un error en el frontend y en la consola del navegador
 		} else {
 			console.log('Need to install MetaMask');
 			setErrorMessage('Please install MetaMask browser extension to interact');
@@ -39,6 +45,8 @@ const SimpleStorage = () => {
 
 	// update account, will cause component re-render
 	const accountChangedHandler = (newAccount) => {
+		// Mostramos solo los primeros 5 y últimos 4 digitos de la dirección
+		// Para acceder a la dirección entera, podemos utilizar 'newAccount'
 		setDefaultAccount(newAccount.slice(0,5)+'...'+newAccount.slice(-5,-1));
 		updateEthers();
 	}
@@ -66,22 +74,28 @@ const SimpleStorage = () => {
 		setContract(tempContract);	
 	}
 
+	// En el siguiente bloque, actualizamos el valor del Smart Contract
 	const setHandler = (event) => {
 		event.preventDefault();
+		// Mostramos en la consola del navegador el valor que enviamos al contrato
 		console.log('sending ' + event.target.setText.value + ' to the contract');
+		// Mediante la función set() del contrato, definimos 'value' como nuevo valor del contrato
 		contract.set(event.target.setText.value);
 	}
 
 	const getCurrentVal = async () => {
+		// Mediante la función get(), obtenemos el valor definido previamente por set()
 		let val = await contract.get();
 		setCurrentContractVal(val);
 	}
 
+	// Lógica para mostar el dot en color rojo (no conectado) o en verde (conectado)
 	if (defaultAccount != null) {
 		document.getElementById('big-dot').className = "color-dot-big-green";
 		document.getElementById('small-dot').className = "color-dot-small-green";
 	}
 	
+	// Lo que se renderiza en el navegador
 	return (
 		<div className='container-hero container'>
 			<div className='container-link'>
