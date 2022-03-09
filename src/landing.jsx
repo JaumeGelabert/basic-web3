@@ -39,7 +39,7 @@ const SimpleStorage = () => {
 
 	// update account, will cause component re-render
 	const accountChangedHandler = (newAccount) => {
-		setDefaultAccount(newAccount.slice(0,5)+'...'+newAccount.slice(-6,-1));
+		setDefaultAccount(newAccount.slice(0,5)+'...'+newAccount.slice(-5,-1));
 		updateEthers();
 	}
 
@@ -83,7 +83,12 @@ const SimpleStorage = () => {
 	}
 	
 	return (
-		<div className='container-hero'>
+		<div className='container-hero container'>
+			<div className='container-link'>
+				<a href="https://github.com/JaumeGelabert/basic-web3" className='github-link'>
+					<i class="bi bi-github "></i>
+				</a>
+			</div>
 			<h1 className='hero-text'>Interact with a Smart Contract</h1>
 			<h2 className='subhero-text'>Follow the next steps:</h2>
 			<Step 
@@ -120,9 +125,10 @@ const SimpleStorage = () => {
 
 			<Step 
 				tittle="3. Check the value"
+				firstLine="Click the next button to check the value. It may take a few seconds to update."
 			/>
 			<div>
-				<button onClick={getCurrentVal}> Get Current Contract Value </button>
+				<button onClick={getCurrentVal} style={{marginTop: '20px'}}> Get Current Contract Value </button>
 			</div>
 			{currentContractVal}
 			{errorMessage}

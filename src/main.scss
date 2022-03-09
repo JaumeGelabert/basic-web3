@@ -11,6 +11,13 @@ body {
   background-color: $background-color;
   margin-left: $margin-sides;
   margin-right: $margin-sides;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 .container-hero {
@@ -186,4 +193,15 @@ body {
 
 .connected-account {
   margin: 0 0 0 10px;
+}
+
+.container-link {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+
+  i {
+    font-size: 30px;
+    color: $black;
+  }
 }
