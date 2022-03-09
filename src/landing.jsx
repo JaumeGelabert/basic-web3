@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {ethers} from 'ethers'
 import SimpleStorage_abi from './contracts/SimpleStorage_abi.json'
+import Step from './step'
 
 const SimpleStorage = () => {
 
@@ -76,11 +77,33 @@ const SimpleStorage = () => {
 	}
 	
 	return (
-		<div>
-		<h4> {"Get/Set Contract interaction"} </h4>
-			<button onClick={connectWalletHandler}>{connButtonText}</button>
+		<div className='container-hero'>
+			<h1 className='hero-text'>Interact with a Smart Contract</h1>
+			<h2 className='subhero-text'>Follow the next steps:</h2>
+			<Step 
+				tittle="1. Connect your wallet"
+				firstLine="You will need to use a Metamask wallet in order to interact with the Smart Contract."
+				secondLine="Press the next button. Select a test wallet in the Metamask's dialog."
+			/>
+			<div className='container-wallet-inter'>
+				<div className='color-dot-big'>
+					<div className='color-dot-small'></div>
+				</div>
+				<button onClick={connectWalletHandler}>{connButtonText}</button>
+				<h3>{defaultAccount}</h3>
+			</div>
+
+			<Step 
+				tittle="2. Set a new value for the Contract"
+				firstLine="Write a new value for the Smart Contract. Take into account that you will need to pay gas"
+				secondLine="in order to push the changes to the blockchain. Please, make sure you are using a testnet."
+				classThirdLine="third-line"
+				thirdLine="After hitting the ‘Submit’ button, you will need to confirm the transaction in your Metamask."
+			/>
+
+
 			<div>
-				<h3>Address: {defaultAccount}</h3>
+				
 			</div>
 			<form onSubmit={setHandler}>
 				<input id="setText" type="text"/>

@@ -1,4 +1,4 @@
-import './App.css';
+import './main.scss';
 import Landing from './landing'
 
 function App() {

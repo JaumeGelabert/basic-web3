@@ -1,0 +1,92 @@
+$background-color: #dbd9e8;
+$main-color: #7b61ff;
+$black: #000000;
+$grey: #888888;
+$white: #ffffff;
+$red: #cf0000;
+$margin-sides: 255px;
+$lato-font: "Lato", sans-serif;
+
+body {
+  background-color: $background-color;
+  margin-left: $margin-sides;
+  margin-right: $margin-sides;
+}
+
+.container-hero {
+  margin-top: 110px;
+
+  h1.hero-text {
+    font-family: $lato-font;
+    font-size: 64px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  h2.subhero-text {
+    font-family: $lato-font;
+    margin: 0;
+    font-weight: 600;
+    font-size: 36px;
+    color: $grey;
+  }
+
+  button {
+    background-color: $main-color;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 30px 10px 30px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    color: $white;
+  }
+}
+
+.container-step {
+  h3.step-tittle {
+    font-family: $lato-font;
+    margin-top: 80px;
+    margin-bottom: 0;
+    font-weight: 600;
+    font-size: 36px;
+    color: $black;
+  }
+
+  p {
+    margin: 0;
+    color: $black;
+  }
+
+  .third-line {
+    margin-top: 7px;
+  }
+}
+
+.container-wallet-inter {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 20px;
+
+  .color-dot-big {
+    background-color: rgba(255, 0, 0, 0.267);
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+  }
+
+  .color-dot-small {
+    background-color: rgb(255, 0, 0);
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+  }
+}
