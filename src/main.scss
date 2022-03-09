@@ -64,23 +64,74 @@ body {
   }
 }
 
-.container-wallet-inter {
+@keyframes desconectado {
+  0% {
+    background-color: rgba(255, 0, 0, 0);
+  }
+
+  50% {
+    background-color: rgba(255, 0, 0, 0.199);
+  }
+
+  100% {
+    background-color: rgba(255, 0, 0, 0);
+  }
+}
+
+@keyframes conectado {
+  0% {
+    background-color: rgba(0, 207, 46, 0);
+  }
+
+  50% {
+    background-color: rgba(0, 207, 46, 0.25);
+  }
+
+  100% {
+    background-color: rgba(0, 207, 46, 0);
+  }
+}
+
+.container-action-step {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   margin-top: 20px;
 
+  .container-dot {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
   .color-dot-big {
-    background-color: rgba(255, 0, 0, 0.267);
-    width: 27px;
-    height: 27px;
     border-radius: 50%;
+    width: 25px;
+    height: 25px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     margin-right: 10px;
+    animation-name: desconectado;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+  }
+
+  .color-dot-big-green {
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    animation-name: conectado;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
   }
 
   .color-dot-small {
@@ -89,4 +140,19 @@ body {
     height: 11px;
     border-radius: 50%;
   }
+
+  .color-dot-small-green {
+    background-color: #00cf2e;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+  }
+
+  input {
+    height: 35px;
+  }
+}
+
+.connected-account {
+  margin: 0 0 0 10px;
 }

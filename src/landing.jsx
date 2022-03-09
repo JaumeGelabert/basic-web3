@@ -39,9 +39,10 @@ const SimpleStorage = () => {
 
 	// update account, will cause component re-render
 	const accountChangedHandler = (newAccount) => {
-		setDefaultAccount(newAccount);
+		setDefaultAccount(newAccount.slice(0,5)+'...'+newAccount.slice(-6,-1));
 		updateEthers();
 	}
+
 
 	const chainChangedHandler = () => {
 		// reload the page to avoid any errors with chain change mid use of application
@@ -75,6 +76,11 @@ const SimpleStorage = () => {
 		let val = await contract.get();
 		setCurrentContractVal(val);
 	}
+
+	if (defaultAccount != null) {
+		document.getElementById('big-dot').className = "color-dot-big-green";
+		document.getElementById('small-dot').className = "color-dot-small-green";
+	}
 	
 	return (
 		<div className='container-hero'>
@@ -85,12 +91,14 @@ const SimpleStorage = () => {
 				firstLine="You will need to use a Metamask wallet in order to interact with the Smart Contract."
 				secondLine="Press the next button. Select a test wallet in the Metamask's dialog."
 			/>
-			<div className='container-wallet-inter'>
-				<div className='color-dot-big'>
-					<div className='color-dot-small'></div>
+			<div className='container-action-step'>
+				<div className='container-dot'>
+					<div className='color-dot-big' id='big-dot'>
+						<div className='color-dot-small' id='small-dot'></div>
+					</div>
 				</div>
 				<button onClick={connectWalletHandler}>{connButtonText}</button>
-				<h3>{defaultAccount}</h3>
+				<p className='connected-account'>{defaultAccount}</p>
 			</div>
 
 			<Step 
@@ -100,17 +108,18 @@ const SimpleStorage = () => {
 				classThirdLine="third-line"
 				thirdLine="After hitting the ‘Submit’ button, you will need to confirm the transaction in your Metamask."
 			/>
-
-
-			<div>
-				
+			<div className='container-action-step'>
+				<form onSubmit={setHandler}>
+					<input id="setText" type="text"/>
+					<button type={"submit"}> Update Contract </button>
+				</form>
 			</div>
-			<form onSubmit={setHandler}>
-				<input id="setText" type="text"/>
-				<button type={"submit"}> Update Contract </button>
-			</form>
+
+			<Step 
+				tittle="3. Check the value"
+			/>
 			<div>
-			<button onClick={getCurrentVal} style={{marginTop: '5em'}}> Get Current Contract Value </button>
+				<button onClick={getCurrentVal} style={{marginTop: '5em'}}> Get Current Contract Value </button>
 			</div>
 			{currentContractVal}
 			{errorMessage}
