@@ -110,16 +110,19 @@ const SimpleStorage = () => {
 			/>
 			<div className='container-action-step'>
 				<form onSubmit={setHandler}>
-					<input id="setText" type="text"/>
-					<button type={"submit"}> Update Contract </button>
+					<div class="input-group-form">
+						<input id="setText" type="text" placeholder="New value" aria-describedby="button-addon2" />
+						<button class="form" type={"submit"} id="button-addon2">Submit</button>
+					</div>
 				</form>
+
 			</div>
 
 			<Step 
 				tittle="3. Check the value"
 			/>
 			<div>
-				<button onClick={getCurrentVal} style={{marginTop: '5em'}}> Get Current Contract Value </button>
+				<button onClick={getCurrentVal}> Get Current Contract Value </button>
 			</div>
 			{currentContractVal}
 			{errorMessage}
