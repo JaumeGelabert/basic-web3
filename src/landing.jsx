@@ -5,10 +5,9 @@ import Step from './step'
 
 const SimpleStorage = () => {
 
-	// deploy simple storage contract and paste deployed contract address here.
-	let contractAddress = '0xAA4c8A5512c152ba5835d7f15eDD8cfE242c9068';
+	// deploy simple storage contract and paste deployed contract address here. This value is local ganache chain
+	let contractAddress = '0x7bfc913ca13b1564C25008C0a51c2eDd1798c4bD';
 
-	// Mediante estos UseState podemos modificar el contenido de algunos elementos
 	const [errorMessage, setErrorMessage] = useState(null);
 	const [defaultAccount, setDefaultAccount] = useState(null);
 	const [connButtonText, setConnButtonText] = useState('Connect Wallet');
@@ -20,15 +19,11 @@ const SimpleStorage = () => {
 	const [contract, setContract] = useState(null);
 
 	const connectWalletHandler = () => {
-		// Si se detecta que existe la extensión de Metamask en el navegador...
 		if (window.ethereum && window.ethereum.isMetaMask) {
 
-			// Accedemos a listado de cuentas conectadas
 			window.ethereum.request({ method: 'eth_requestAccounts'})
 			.then(result => {
-				// y elegimos la de índice 0
 				accountChangedHandler(result[0]);
-				// Cambiamos el UseState del boton para que muestre 'Wallet Connected'
 				setConnButtonText('Wallet Connected');
 			})
 			.catch(error => {
@@ -36,7 +31,6 @@ const SimpleStorage = () => {
 			
 			});
 
-		// Si no hay Metamask instalado, mostramos un error en el frontend y en la consola del navegador
 		} else {
 			console.log('Need to install MetaMask');
 			setErrorMessage('Please install MetaMask browser extension to interact');
@@ -45,9 +39,7 @@ const SimpleStorage = () => {
 
 	// update account, will cause component re-render
 	const accountChangedHandler = (newAccount) => {
-		// Mostramos solo los primeros 5 y últimos 4 digitos de la dirección
-		// Para acceder a la dirección entera, podemos utilizar 'newAccount'
-		setDefaultAccount(newAccount.slice(0,5)+'...'+newAccount.slice(-5,-1));
+		setDefaultAccount(newAccount.slice(0,5)+'...'+newAccount.slice(-6,-1));
 		updateEthers();
 	}
 
@@ -74,40 +66,29 @@ const SimpleStorage = () => {
 		setContract(tempContract);	
 	}
 
-	// En el siguiente bloque, actualizamos el valor del Smart Contract
 	const setHandler = (event) => {
 		event.preventDefault();
-		// Mostramos en la consola del navegador el valor que enviamos al contrato
 		console.log('sending ' + event.target.setText.value + ' to the contract');
-		// Mediante la función set() del contrato, definimos 'value' como nuevo valor del contrato
 		contract.set(event.target.setText.value);
 	}
 
 	const getCurrentVal = async () => {
-		// Mediante la función get(), obtenemos el valor definido previamente por set()
 		let val = await contract.get();
 		setCurrentContractVal(val);
 	}
 
-	// Lógica para mostar el dot en color rojo (no conectado) o en verde (conectado)
 	if (defaultAccount != null) {
 		document.getElementById('big-dot').className = "color-dot-big-green";
 		document.getElementById('small-dot').className = "color-dot-small-green";
 	}
 	
-	// Lo que se renderiza en el navegador
 	return (
-		<div className='container-hero container'>
-			<div className='container-link'>
-				<a href="https://github.com/JaumeGelabert/basic-web3" target="_blank" className='github-link'>
-					<i class="bi bi-github "></i>
-				</a>
-			</div>
+		<div className='container-hero'>
 			<h1 className='hero-text'>Interact with a Smart Contract</h1>
 			<h2 className='subhero-text'>Follow the next steps:</h2>
 			<Step 
 				tittle="1. Connect your wallet"
-				firstLine={"You will need to use a Metamask wallet in order to interact with the Smart Contract."}
+				firstLine="You will need to use a Metamask wallet in order to interact with the Smart Contract."
 				secondLine="Press the next button. Select a test wallet in the Metamask's dialog."
 			/>
 			<div className='container-action-step'>
@@ -129,22 +110,18 @@ const SimpleStorage = () => {
 			/>
 			<div className='container-action-step'>
 				<form onSubmit={setHandler}>
-					<div class="input-group-form">
-						<input id="setText" type="text" placeholder="New value" aria-describedby="button-addon2" />
-						<button class="form" type={"submit"} id="button-addon2">Submit</button>
-					</div>
+					<input id="setText" type="text"/>
+					<button type={"submit"}> Update Contract </button>
 				</form>
-
 			</div>
 
 			<Step 
 				tittle="3. Check the value"
-				firstLine="Click the next button to check the value. It may take a few seconds to update."
 			/>
-			<div className='container-action-step'>
-				<button onClick={getCurrentVal}> Get Current Contract Value </button>
-				<p className='connected-account'>{currentContractVal}</p>
+			<div>
+				<button onClick={getCurrentVal} style={{marginTop: '5em'}}> Get Current Contract Value </button>
 			</div>
+			{currentContractVal}
 			{errorMessage}
 		</div>
 	);

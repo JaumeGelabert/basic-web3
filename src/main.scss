@@ -11,13 +11,6 @@ body {
   background-color: $background-color;
   margin-left: $margin-sides;
   margin-right: $margin-sides;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-button:hover {
-  cursor: pointer;
 }
 
 .container-hero {
@@ -48,10 +41,6 @@ button:hover {
     font-weight: 500;
     font-size: 16px;
     color: $white;
-  }
-
-  button.form {
-    border-radius: 0px 5px 5px 0px;
   }
 }
 
@@ -159,49 +148,11 @@ button:hover {
     border-radius: 50%;
   }
 
-  .input-group-form {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
-
   input {
-    // Hay que poner 4px de menos
     height: 35px;
-    width: 238px;
-    border-radius: 5px 0px 0px 5px;
-    border: 1px solid $grey;
-    background-color: rgba(0, 207, 46, 0);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding-left: 5px;
-    font-size: 16px;
-  }
-
-  input:focus {
-    outline: none;
-  }
-
-  input::placeholder {
-    font-size: 16px;
-    margin-left: 5px;
-    color: $grey;
   }
 }
 
 .connected-account {
   margin: 0 0 0 10px;
-}
-
-.container-link {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-
-  i {
-    font-size: 24px;
-    color: $black;
-  }
 }
